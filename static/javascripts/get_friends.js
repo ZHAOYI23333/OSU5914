@@ -1,6 +1,6 @@
-function getFriends(user_id)
+function getFriends(twitter_handle)
 {
-	fetch(window.location.href + 'friends/' + user_id)
+	fetch(window.location.href + 'friends/' + twitter_handle)
 	.then((response) => {
 		return response.json();
 	})

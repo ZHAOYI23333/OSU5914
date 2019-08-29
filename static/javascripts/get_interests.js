@@ -1,6 +1,6 @@
-function getInterests(user_id)
+function getInterests(twitter_handle)
 {
-	fetch(window.location.href + 'interests/' + user_id)
+	fetch(window.location.href + 'interests/' + twitter_handle)
 	.then((response) => {
 		return response.json();
 	})
