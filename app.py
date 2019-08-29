@@ -10,28 +10,25 @@ def index():
 def user(twitter_handle):
 	if twitter_handle == 'samlerner':
 		return jsonify({
-			'user_id': '1234',
 			'name': 'Sam Lerner',
 			'bio': 'OSU Computer Science. A in 5914',
 			'avatar': 'test_avatar.jpg',
 		})
 	elif twitter_handle == 'bobbyj':
 		return jsonify({
-			'user_id': '2345',
 			'name': 'Bobby Johnson',
 			'bio': 'A generic name',
 			'avatar': 'test_avatar2.jpg',
 		})
 	elif twitter_handle == 'JD':
 		return jsonify({
-			'user_id': '3456',
 			'name': 'John Doe',
 			'bio': 'An even more generic name',
 			'avatar': 'test_avatar3.jpg',
 		})
 
-@app.route('/interests/<user_id>')
-def interests(user_id):
+@app.route('/interests/<twitter_handle>')
+def interests(twitter_handle):
 	return jsonify([
 		'baseketball',
 		'poetry',
@@ -40,8 +37,8 @@ def interests(user_id):
 		'computer science'
 	])
 
-@app.route('/friends/<user_id>')
-def friends(user_id):
+@app.route('/friends/<twitter_handle>')
+def friends(twitter_handle):
 	return jsonify([
 		'samlerner',
 		'bobbyj',
