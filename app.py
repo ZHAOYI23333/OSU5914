@@ -6,7 +6,7 @@ app = Flask(__name__, static_url_path='/static')
 def index():
 	return app.send_static_file('index.html')
 
-@app.route('/user/<twitter_handle')
+@app.route('/user/<twitter_handle>')
 def user(twitter_handle):
 	if twitter_handle == 'samlerner':
 		return jsonify({
@@ -29,7 +29,6 @@ def user(twitter_handle):
 			'bio': 'An even more generic name',
 			'avatar': 'test_avatar3.jpg',
 		})
-		
 
 @app.route('/interests/<user_id>')
 def interests(user_id):
@@ -48,3 +47,6 @@ def friends(user_id):
 		'bobbyj',
 		'JD'
 	])
+
+if __name__ == '__main__':
+	app.run(port=5000)
