@@ -6,43 +6,32 @@ app = Flask(__name__, static_url_path='/static')
 def index():
 	return app.send_static_file('index.html')
 
-@app.route('/user/<twitter_handle>')
-def user(twitter_handle):
-	if twitter_handle == 'samlerner':
-		return jsonify({
-			'name': 'Sam Lerner',
-			'bio': 'OSU Computer Science. A in 5914',
-			'avatar': 'test_avatar.jpg',
-		})
-	elif twitter_handle == 'bobbyj':
-		return jsonify({
-			'name': 'Bobby Johnson',
-			'bio': 'A generic name',
-			'avatar': 'test_avatar2.jpg',
-		})
-	elif twitter_handle == 'JD':
-		return jsonify({
-			'name': 'John Doe',
-			'bio': 'An even more generic name',
-			'avatar': 'test_avatar3.jpg',
-		})
+@app.route('/user/<handle>')
+def user(handle):
+	if handle == '@mdo':
+		return jsonify({ 'first': 'Mark', 'last': 'Otto', 'handle': '@mdo' })
+	if handle == '@fat':
+		return jsonify({ 'first': 'Jacob', 'last': 'Thornton', 'handle': '@fat' })
+	if handle == '@twitter':
+		return jsonify({ 'first': 'Larry', 'last': 'the Bird', 'handle': '@twitter' })
 
-@app.route('/interests/<twitter_handle>')
-def interests(twitter_handle):
-	return jsonify([
-		'baseketball',
-		'poetry',
-		'music',
-		'heavy metal',
-		'computer science'
-	])
+@app.route('/interests/<handle>')
+def interests(handle):
+	if handle == "@slerner":
+		return jsonify(["Basketball", "Soccer", "Drawing", "Painting", "Archery", "Swimming"])
+	elif handle == "@mdo":
+		return jsonify(["Basketball", "Soccer"])
+	elif handle == "@fat":
+		return jsonify(["Drawing", "Soccer"])
+	elif handle == "@twitter":
+		return jsonify(["Archery", "Painting", "Swimming"])
 
-@app.route('/friends/<twitter_handle>')
-def friends(twitter_handle):
+@app.route('/friends/<handle>')
+def friends(handle):
 	return jsonify([
-		'samlerner',
-		'bobbyj',
-		'JD'
+		'@mdo',
+		'@fat',
+		'@twitter'
 	])
 
 if __name__ == '__main__':
