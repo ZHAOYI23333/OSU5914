@@ -68,12 +68,15 @@
           </div>
         </div>
       
-        <div class="form-group">
-          <label for="exampleInputEmail1">Enter Twitter Handle</label>
-          <input class="form-control" id="twitter-handle-input" aria-describedby="emailHelp" placeholder="Enter Handle">
-          <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
+        <label for="exampleInputEmail1">Enter Twitter Handle</label>
+        <div class="input-group mb-3">
+          <input type="text" id="twitter-handle-input" class="form-control" placeholder="Enter Handle" aria-label="emailHelp" placeholder="Enter Handle">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-primary" id="twitter-handle-submit-btn">Find Friends</button>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="twitter-handle-submit-btn">Find Friends</button>
+        <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
+
         <br><br>
         <h3>Interests Detected (in order of confidence):</h3>
 
