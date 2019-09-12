@@ -16,7 +16,7 @@ for line in open('twitter_cache.txt', 'r'):
 
 #print(tweets_raw[3])
 #created_at, id_str, text, location, geo, coordinates, place, screen_name, timestamp
-document= {"handle":"uninitialized","tweets":[]}
+document= {"handle":"uninitialized","tweets":""}
 
 #collection_names = {}
 collections = discovery.list_collections(environment_id).get_result()
@@ -31,30 +31,22 @@ else:
 	collection_id = collections['collections'][0]['collection_id']
 
 screen_name = ""
+count = 0
 for tweet in tweets_raw:
 	if ('user_id' not in document):
 		screen_name = tweet['user']['screen_name']
 		document.update({'user_id':tweet['user']['id_str'], 'handle':screen_name, 'location':tweet['user']['location']})
 	document.update({"handle":screen_name})
+	if (len(document['tweets'])==0):
+		document.update({'tweets':tweet['text']})
+	else:
+		document.update({'tweets':document['tweets']+ "\n\n"+tweet['text']})
+	#document['tweets'].update({'timestamp':tweet['timestamp_ms'], 'created_at':tweet['created_at'], 'tweet_id':tweet['id_str'], 'text':tweet['text'], 'geo':tweet['geo'], 'coordinates':tweet['coordinates'], 'place':tweet['place']})
 
-	document['tweets'].append({'timestamp':tweet['timestamp_ms'], 'created_at':tweet['created_at'], 'tweet_id':tweet['id_str'], 'text':tweet['text'], 'geo':tweet['geo'], 'coordinates':tweet['coordinates'], 'place':tweet['place']})
-
-	# if screen_name not in collection_names:
-	# 	new_collection = discovery.create_collection(environment_id=environment_id, name=screen_name).get_result()
-	# 	collection_id = new_collection['collection_id']
-	# 	collection_names.update({screen_name:collection_id})
-	# else:
-	# 	collection_id = collection_names[screen_name]
-	#try:
-	print("added tweet")
-	if (len(document['tweets'])>50):
+	print("added tweet" + str(count))
+	count+=1
+	if (count>=100):
 		break;
-	#discovery.add_document(environment_id, collection_id, file=json.dumps(tweet_json), filename=tweet['id_str'], file_content_type='application/json')
-	#except(e):
-		#print(e)
 print(document)
 discovery.add_document(environment_id, collection_id, file=json.dumps(document), filename=screen_name, file_content_type='application/json')
-
-
-environments = discovery.list_environments().get_result()
-print(json.dumps(environments, indent=2))
+print("uploaded document")
