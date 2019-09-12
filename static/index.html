@@ -71,6 +71,7 @@
         <label for="exampleInputEmail1">Enter Twitter Handle</label>
         <div class="input-group mb-3">
           <input type="text" id="twitter-handle-input" class="form-control" placeholder="Enter Handle" aria-label="emailHelp" placeholder="Enter Handle">
+          <input type="text" id="location-input" class="form-control" placeholder="Enter Location" aria-label="locationHelp" placeholder="Enter Location">
           <div class="input-group-append">
             <button type="submit" class="btn btn-primary" id="twitter-handle-submit-btn">Find Friends</button>
           </div>
@@ -84,13 +85,6 @@
           <div class="row">
             <div class="text-center">
                 <div class="list-group list-group-horizontal" id="self-interest-div">
-                  <!--
-                    <p class="list-group-item">Basketball</p>
-                    <p class="list-group-item">Soccer</p>
-                    <p class="list-group-item">Drawing</p>
-                    <p class="list-group-item">Painting</p>
-                    <p class="list-group-item">Archery</p>
-                    <p class="list-group-item">Swimming</p>-->
                 </div>
               </div>
           </div>
@@ -108,29 +102,6 @@
             </tr>
           </thead>
           <tbody id="friend-table-body">
-            <!--
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>basketball, soccer</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>drawing, soccer</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>@twitter</td>
-              <td>archery, painting, swimming</td>
-            </tr>
-          -->
           </tbody>
         </table>
 
@@ -213,18 +184,21 @@
 
     $('#twitter-handle-submit-btn').click(() => {
       let handle = $('#twitter-handle-input').val();
+      let location = $('#location-input').val();
 
-      getInterests(handle, (data) => {
-        displayInterests(data);
-      })
+      getInterests(handle, (interests) => {
+        let interestString = interests.map((x) => encodeURIComponent(x)).join(',')
 
-      $.getJSON('/friends/' + handle, (data, status) => {
-        if (status !== "success") {
-          alert('Could\'nt get your friends. Sorry');
-          return;
-        }
-        
-        displayFriends(data);
+        $.getJSON('/similar_users/' + encodeURIComponent(location) + '?interests=' + interestString, (friends, status) => {
+          if (status !== "success") {
+            alert('Could\'nt get your friends. Sorry');
+            return;
+          }
+
+          displayFriends(friends);
+        })
+
+        displayInterests(interests);
       })
     })
   </script>

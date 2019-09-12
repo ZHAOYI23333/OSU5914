@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -30,8 +30,10 @@ def interests(handle):
 
 	return 404
 
-@app.route('/friends/<handle>')
-def friends(handle):
+@app.route('/similar_users/<location>')
+def friends(location):
+	interests = request.args.get('interests').split(',')
+
 	return jsonify([
 		'@mdo',
 		'@fat',
