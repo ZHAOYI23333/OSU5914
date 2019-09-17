@@ -68,14 +68,20 @@
           </div>
         </div>
       
-        <label for="exampleInputEmail1">Enter Twitter Handle</label>
+        <label for="exampleInputEmail1">Enter Twitter Info</label>
         <div class="input-group mb-3">
-          <input type="text" id="twitter-handle-input" class="form-control" placeholder="Enter Handle" aria-label="emailHelp" placeholder="Enter Handle">
-          <input type="text" id="location-input" class="form-control" placeholder="Enter Location" aria-label="locationHelp" placeholder="Enter Location">
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-primary" id="twitter-handle-submit-btn">Find Friends</button>
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">@</span>
           </div>
+          <input type="text" id="twitter-handle-input" class="form-control" placeholder="Username" aria-label="emailHelp">
         </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2">Location</span>
+          </div>
+          <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41" aria-label="Location">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
         <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
 
         <br><br>
