@@ -123,6 +123,9 @@ def upload_tweets_to_discovery(tweet_list):
 		if i >= 100:
 			break;
 
+	if screen_name is None:
+		return 0
+
 	print(document)
 
 	discovery.add_document(environment_id, 
