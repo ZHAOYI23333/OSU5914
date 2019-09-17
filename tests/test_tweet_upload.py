@@ -1,8 +1,12 @@
+'''
+NOTE: Run this from the top-level directory
+'''
+
 import os
 from os.path import join
 
 import sys
-sys.path.insert(0, join(os.getcwd(), '..', 'tweet_api_src'))
+sys.path.insert(0, join(os.getcwd(), 'tweet_api_src'))
 
 from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
 
