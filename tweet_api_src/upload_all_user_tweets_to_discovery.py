@@ -1,6 +1,46 @@
 import json
 from ibm_watson import DiscoveryV1
 
+def get_environment_id(discovery):
+	result = discovery.list_environments().get_result()
+	if not 'environments' in result:
+		return None
+
+	environments = result['environments']
+	if len(environments) < 2:
+		return None
+
+	environment = environments[1]
+	if not 'environment_id' in environment:
+		return None
+
+	return environment['environment_id']
+
+
+def get_collection_id(discovery, environment_id):
+	result = discovery.list_collections(environment_id).get_result()
+	if not 'collections' in result:
+		return None
+
+	collections = result['collections']
+	collection = None
+
+	if len(collections) == 0:
+		print('Creating collection')
+		collection = discovery.create_collection(environment_id=environment_id, 
+												 name='tweets').get_result()
+	else:
+		collection = collections[0]
+
+	if collection is None:
+		return None
+
+	if not 'collection_id' in collection:
+		return None
+
+	return collection['collection_id']
+
+
 def upload_tweets_to_discovery(tweet_list):
 	'''
 	:param tweet_list: A list of tweets where each tweet needs to be formatted as:
@@ -24,28 +64,16 @@ def upload_tweets_to_discovery(tweet_list):
 	    iam_apikey=apikey,
 	    url='https://gateway-wdc.watsonplatform.net/discovery/api'
 	)
-	environments = discovery.list_environments().get_result()
-	environment_id = environments['environments'][1]['environment_id']
 
-	print("Loading tweet data")
-
-	collections = discovery.list_collections(environment_id).get_result()
-	collection_id = ""
-	print("creating collection if necessary")
-
-	collection = None
-
-	if not 'collection' in collections or len(collections['collections']) == 0:
-		collection = discovery.create_collection(environment_id=environment_id, name='tweets').get_result()
-	else:
-		collection = collections['collections'][0]
-
-	if collection is None:
+	environment_id = get_environment_id(discovery)
+	if environment_id is None:
 		return 0
 
-	collection_id = collection['collection_id']
+	collection_id = get_collection_id(discovery, environment_id)
+	if collection_id is None:
+		return 0
 
-	document= { 
+	document = { 
 		"handle": "uninitialized",
 		"tweets": ""
 	}
@@ -79,13 +107,13 @@ def upload_tweets_to_discovery(tweet_list):
 		document_text = tweet['text']
 
 		if 'tweet' in document and len(document['tweets']) > 0:
-			document_text = document['tweets'] + '\n\n' + document_text
+			document_text = document['tweets'] + '||' + document_text
 
 		document.update({
 			'tweets': document_text
 		})
 
-		print("added tweet" + str(count))
+		print('Added tweet %d' % i)
 
 		if i >= 100:
 			break;
