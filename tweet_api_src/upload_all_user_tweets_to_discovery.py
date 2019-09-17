@@ -79,6 +79,7 @@ def upload_tweets_to_discovery(tweet_list):
 	}
 
 	num_tweets_added = 0
+	screen_name = None
 
 	for i, tweet in enumerate(tweet_list):
 		if type(tweet) != dict or not all(['user' in tweet, 'text' in tweet]):
@@ -91,17 +92,21 @@ def upload_tweets_to_discovery(tweet_list):
 
 		num_tweets_added += 1
 
-		screen_name = user['screen_name']
+		username = user['screen_name']
+		if screen_name is None:
+			screen_name = username
+		elif screen_name != username:
+			return 0
 
 		if not 'user_id' in document:
 			document.update({ 
 				'user_id': user['id_str'], 
-				'handle': screen_name, 
+				'handle': username, 
 				'location': user['location'] 
 			})
 
 		document.update({
-			"handle": screen_name
+			"handle": username
 		})
 
 		document_text = tweet['text']
