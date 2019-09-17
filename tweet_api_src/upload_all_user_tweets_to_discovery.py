@@ -1,9 +1,23 @@
 import json
 from ibm_watson import DiscoveryV1
 
-
-
 def upload_tweets_to_discovery(tweet_list):
+	'''
+	:param tweet_list: A list of tweets where each tweet needs to be formatted as:
+		{
+			'user': {
+				'screen_name': <screen_name>,
+				'id_str': <id_str>,
+				'location': <location>
+			},
+			'text': <text>
+		}
+
+	:returns An integers representing the number of tweets added to discovery
+	'''
+	if type(tweet_list) != list:
+		return 0
+
 	apikey = '0xn8K3fpjG6WKz3SGuXuZQvsmnV1OVhjMAUxnMbx0MUV'
 	discovery = DiscoveryV1(
 	    version='2019-04-30',
@@ -12,45 +26,78 @@ def upload_tweets_to_discovery(tweet_list):
 	)
 	environments = discovery.list_environments().get_result()
 	environment_id = environments['environments'][1]['environment_id']
+
 	print("Loading tweet data")
-	# tweets_raw = []
-	# for line in open('twitter_cache.txt', 'r'):
-	#     tweets_raw.append(json.loads(line))
 
-	#print(tweets_raw[3])
-	#created_at, id_str, text, location, geo, coordinates, place, screen_name, timestamp
-	document= {"handle":"uninitialized","tweets":""}
-
-	#collection_names = {}
 	collections = discovery.list_collections(environment_id).get_result()
 	collection_id = ""
 	print("creating collection if necessary")
-	if len(collections['collections'])==0:
-		new_collection = discovery.create_collection(environment_id=environment_id, name='tweets').get_result()
-		collection_id = new_collection['collection_id']
+
+	collection = None
+
+	if not 'collection' in collections or len(collections['collections']) == 0:
+		collection = discovery.create_collection(environment_id=environment_id, name='tweets').get_result()
 	else:
+		collection = collections['collections'][0]
 
-		#
-		collection_id = collections['collections'][0]['collection_id']
+	if collection is None:
+		return 0
 
-	screen_name = ""
-	count = 0
+	collection_id = collection['collection_id']
 
-	for tweet in tweet_list:
-		if ('user_id' not in document):
-			screen_name = tweet['user']['screen_name']
-			document.update({'user_id':tweet['user']['id_str'], 'handle':screen_name, 'location':tweet['user']['location']})
-		document.update({"handle":screen_name})
-		if (len(document['tweets'])==0):
-			document.update({'tweets':tweet['text']})
-		else:
-			document.update({'tweets':document['tweets']+ "\n\n"+tweet['text']})
-		#document['tweets'].update({'timestamp':tweet['timestamp_ms'], 'created_at':tweet['created_at'], 'tweet_id':tweet['id_str'], 'text':tweet['text'], 'geo':tweet['geo'], 'coordinates':tweet['coordinates'], 'place':tweet['place']})
+	document= { 
+		"handle": "uninitialized",
+		"tweets": ""
+	}
+
+	num_tweets_added = 0
+
+	for i, tweet in enumerate(tweet_list):
+		if type(tweet) != dict or not all(['user' in tweet, 'text' in tweet]):
+			continue
+
+		user = tweet['user']
+
+		if type(user) != dict or not all(['screen_name' in user, 'id_str' in user, 'location' in user]):
+			continue
+
+		num_tweets_added += 1
+
+		screen_name = user['screen_name']
+
+		if not 'user_id' in document:
+			document.update({ 
+				'user_id': user['id_str'], 
+				'handle': screen_name, 
+				'location': user['location'] 
+			})
+
+		document.update({
+			"handle": screen_name
+		})
+
+		document_text = tweet['text']
+
+		if 'tweet' in document and len(document['tweets']) > 0:
+			document_text = document['tweets'] + '\n\n' + document_text
+
+		document.update({
+			'tweets': document_text
+		})
 
 		print("added tweet" + str(count))
-		count+=1
-		if (count>=100):
+
+		if i >= 100:
 			break;
+
 	print(document)
-	discovery.add_document(environment_id, collection_id, file=json.dumps(document), filename=screen_name, file_content_type='application/json')
+
+	discovery.add_document(environment_id, 
+						   collection_id, 
+						   file=json.dumps(document), 
+						   filename=screen_name, 
+						   file_content_type='application/json')
+
 	print("uploaded document")
+
+	return num_tweets_added
