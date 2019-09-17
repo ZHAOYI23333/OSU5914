@@ -189,7 +189,7 @@
     });
 
     $('#twitter-handle-submit-btn').click(() => {
-      let handle = $('#twitter-handle-input').val();
+      let handle = '@' + $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
       getInterests(handle, (interests) => {
@@ -197,7 +197,7 @@
 
         $.getJSON('/similar_users/' + encodeURIComponent(location) + '?interests=' + interestString, (friends, status) => {
           if (status !== "success") {
-            alert('Could\'nt get your friends. Sorry');
+            alert('Couldn\tt get your friends. Sorry');
             return;
           }
 
