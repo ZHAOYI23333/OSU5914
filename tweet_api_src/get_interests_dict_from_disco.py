@@ -7,7 +7,9 @@ import operator
 
 
 # Yangzhenchuan Zou (Young Zou)
-def get_interests():
+
+# returns: a dict as { '<tweet_id>' : [list of interests], ... }
+def get_interests_from_discovery():
     
     discovery = DiscoveryV1(
         version = "2019-08-20",
@@ -31,7 +33,6 @@ def get_interests():
     ).get_result()
     
     print("Interests Extraction Completed")
-
 
     return _make_interests_dict(response_tweets)
 
