@@ -101,9 +101,8 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
               <th scope="col">Handle</th>
+              <th scope="col">Match Score</th>
               <th scope="col">Similar Interests</th>
             </tr>
           </thead>
@@ -147,7 +146,7 @@
       }
     }
 
-    function displayFriend(idx, handle, first, last, interests) {
+    function displayFriend(idx, handle, score, interests) {
       let friendDiv = $('#friend-table-body');
 
       var frRow = document.createElement('tr');
@@ -156,31 +155,22 @@
       frScope.setAttribute('scope', 'row');
       frScope.innerHTML = idx;
 
-      var frFirst = document.createElement('td');
-      frFirst.innerHTML = first;
-
-      var frLast = document.createElement('td');
-      frLast.innerHTML = last;
-
       var frHandle = document.createElement('td');
       frHandle.innerHTML = handle;
+
+      var frScore = document.createElement('td');
+      frScope.innerHTML = score;
 
       var frInt = document.createElement('td');
       frInt.innerHTML = interests.join(', ');
 
-      frRow.append(frScope, frFirst, frLast, frHandle, frInt);
+      frRow.append(frScope, frHandle, frScore, frInt);
       friendDiv.append(frRow);
     }
     
     function displayFriends(friends) {
-      for (var i=0; i<friends.length; i++) {
-        var idx = i;
-        $.get('/user/' + friends[i], (user, status) => {
-          getInterests(user['handle'], (interests) => {
-            displayFriend(idx, user['handle'], user['first'], user['last'], interests);
-          });
-        });
-      }
+      for (var i=0; i<friends.length; i++)
+        displayFriend(i, user['handle'], user['score'], user['interests']);
     }
 
     $("#menu-toggle").click(function(e) {
@@ -192,18 +182,25 @@
       let handle = '@' + $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
-      $.getJSON('/friends_and_interests/' + encodeURIComponent(handle) + '/' + encodeURIComponent(location), (friends_and_interests, status) => {
+      $.post('/user/' + encodeURIComponent(handle), (data, status, xhr) => {
         if (status !== "success") {
-          alert('Couldn\tt get your friends. Sorry');
+          alert('Couldn\'t upload you into our database. Sorry');
           return;
         }
 
-        friends = friends_and_interests.friends;
-        interests = friends_and_interests.interests;
+        $.getJSON('/friends_and_interests/' + encodeURIComponent(handle) + '/' + encodeURIComponent(location), (friends_and_interests, status) => {
+          if (status !== "success") {
+            alert('Couldn\'t get your friends. Sorry');
+            return;
+          }
 
-        displayInterests(interests);
-        displayFriends(friends);
-      });
+          friends = friends_and_interests.friends;
+          interests = friends_and_interests.interests;
+
+          displayInterests(interests);
+          displayFriends(friends);
+        });
+      })
     })
   </script>
 

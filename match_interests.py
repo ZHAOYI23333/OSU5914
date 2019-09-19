@@ -28,7 +28,7 @@ def get_most_alike_to_user(user_id, all_users):
 		if user == user_id:
 			continue
 
-		scores.append((user, match_score_between_users(my_interests, interests)))
+		scores.append((user, interests, match_score_between_users(my_interests, interests)))
 
-	sorted_scores = list(reversed(sorted(scores, key=lambda x: x[1])))
-	return [{'handle': user, 'score': score} for user, score in sorted_scores]
+	sorted_scores = list(reversed(sorted(scores, key=lambda x: x[2])))
+	return [{'handle': user, 'score': score, 'interests': interests} for user, interests, score in sorted_scores]
