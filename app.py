@@ -10,14 +10,7 @@ def index():
 
 @app.route('/user/<handle>')
 def user(handle):
-	if handle == '@mdo':
-		return jsonify({ 'first': 'Mark', 'last': 'Otto', 'handle': '@mdo' }), 200
-	if handle == '@fat':
-		return jsonify({ 'first': 'Jacob', 'last': 'Thornton', 'handle': '@fat' }), 200
-	if handle == '@twitter':
-		return jsonify({ 'first': 'Larry', 'last': 'the Bird', 'handle': '@twitter' }), 200
-
-	return 404
+	return 200
 
 @app.route('/friends_and_interests/<handle>/<location>')
 def friends_and_interests(handle, location):
