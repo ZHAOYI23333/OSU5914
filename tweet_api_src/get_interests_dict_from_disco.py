@@ -1,50 +1,32 @@
 import json
-from ibm_watson import DiscoveryV1
+from disco_utils import *
 
 import numpy as np
 import pandas as pd
 import operator
 
-
 # Yangzhenchuan Zou (Young Zou)
 
 # returns: a dict as { '<tweet_id>' : [list of interests], ... }
 def get_interests_from_discovery():
-    
-    discovery = DiscoveryV1(
-        version = "2019-08-20",
-        iam_apikey='0xn8K3fpjG6WKz3SGuXuZQvsmnV1OVhjMAUxnMbx0MUV',
-        url='https://gateway-wdc.watsonplatform.net/discovery/api'
-    )
-    
-    
-    env_list = discovery.list_environments().get_result()
-    env_id = env_list['environments'][1]['environment_id']                  # env id
-    
-    collection_list_res = discovery.list_collections(env_id).get_result()
-    collection_id = collection_list_res['collections'][0]['collection_id']  # collection id
-    
+    discovery = get_disco()
+    env_id = get_environment_id(discovery)
+    collection_id = get_collection_id(discovery, env_id)
     
     # For each document, only returns id and enriched_tweets.categories.label
-    response_tweets = discovery.query(
-    env_id,
-    collection_id,
-    return_fields='id, enriched_tweets.categories.label',
-    ).get_result()
+    response_tweets = discovery.query(env_id,
+                                      collection_id,
+                                      return_fields='id, enriched_tweets.categories.label').get_result()
     
     print("Interests Extraction Completed")
 
     return _make_interests_dict(response_tweets)
 
 
-
-
 def _make_interests_dict(response_tweets):
-    
     # Load stop words
-    stopwords_file = open('stopwords.txt', 'r')
-    stopwords_set = {line.strip() for line in stopwords_file}
-    stopwords_file.close()
+    with open('stopwords.txt', 'r') as stopwords_file:
+        stopwords_set = {line.strip() for line in stopwords_file}
 
     # Crop the query response and frame it with pandas DataFrame
     res_df = pd.DataFrame(response_tweets['results']).drop('result_metadata', axis=1)
@@ -70,7 +52,6 @@ def _make_interests_dict(response_tweets):
         # Sort keywords by frequency
         sorted_interests = sorted(word_dict, key=word_dict.get, reverse=True)
 
-
         result_interests_list = []
         
         # Filter out stop words
@@ -82,5 +63,4 @@ def _make_interests_dict(response_tweets):
         # Append result dictionary
         user_interests_dict[tweet_id] = result_interests_list
     
-        
     return user_interests_dict
