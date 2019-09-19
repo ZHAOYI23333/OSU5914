@@ -192,20 +192,18 @@
       let handle = '@' + $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
-      getInterests(handle, (interests) => {
-        let interestString = interests.map((x) => encodeURIComponent(x)).join(',')
+      $.getJSON('/friends_and_interests/' + encodeURIComponent(handle) + '/' + encodeURIComponent(location), (friends_and_interests, status) => {
+        if (status !== "success") {
+          alert('Couldn\tt get your friends. Sorry');
+          return;
+        }
 
-        $.getJSON('/similar_users/' + encodeURIComponent(location) + '?interests=' + interestString, (friends, status) => {
-          if (status !== "success") {
-            alert('Couldn\tt get your friends. Sorry');
-            return;
-          }
-
-          displayFriends(friends);
-        })
+        friends = friends_and_interests.friends;
+        interests = friends_and_interests.interests;
 
         displayInterests(interests);
-      })
+        displayFriends(friends);
+      });
     })
   </script>
 
