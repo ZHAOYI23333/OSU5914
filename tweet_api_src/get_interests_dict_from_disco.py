@@ -16,6 +16,7 @@ def get_interests_from_discovery():
     # For each document, only returns id and enriched_tweets.categories.label
     response_tweets = discovery.query(env_id,
                                       collection_id,
+                                      count = 100,
                                       return_fields='id, enriched_tweets.categories.label').get_result()
     
     print("Interests Extraction Completed")
