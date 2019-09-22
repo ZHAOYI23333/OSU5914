@@ -45,3 +45,18 @@ def get_disco():
         iam_apikey='0xn8K3fpjG6WKz3SGuXuZQvsmnV1OVhjMAUxnMbx0MUV',
         url='https://gateway-wdc.watsonplatform.net/discovery/api'
     )
+
+#filename is the handle
+def get_document_filename(doc_id):
+	disco = get_disco()
+	env_id = get_environment_id(disco)
+	return disco.get_document_status(env_id, get_collection_id(disco,env_id), doc_id).result['filename']
+
+#filename is the handle, pass in list of all docs
+def get_document_id_from_filename(all_users, filename):
+	for user, interests in all_users.items():
+		handle = get_document_filename(user)
+		if handle == filename:
+			return user
+	return "File not found"
+	

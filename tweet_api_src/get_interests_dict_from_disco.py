@@ -1,6 +1,5 @@
 import json
-from disco_utils import *
-
+from tweet_api_src.disco_utils import *
 import numpy as np
 import pandas as pd
 import operator
@@ -26,7 +25,7 @@ def get_interests_from_discovery():
 
 def _make_interests_dict(response_tweets):
     # Load stop words
-    with open('stopwords.txt', 'r') as stopwords_file:
+    with open('tweet_api_src/stopwords.txt', 'r') as stopwords_file:
         stopwords_set = {line.strip() for line in stopwords_file}
 
     # Crop the query response and frame it with pandas DataFrame

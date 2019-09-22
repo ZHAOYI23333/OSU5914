@@ -137,13 +137,17 @@
 
     function displayInterests(interests) {
       let interestDiv = $('#self-interest-div');
+
+      var value;
+      Object.keys(interests).forEach(function(key) {
+          value = interests[key];
+          var intP = document.createElement('p');
+          intP.className = 'list-group-item';
+          intP.innerHTML = value;
+          interestDiv.append(intP);
+          console.log(value);
+      });
       
-      for (var i=0; i<interests.length; i++) {
-        var intP = document.createElement('p');
-        intP.className = 'list-group-item';
-        intP.innerHTML = interests[i];
-        interestDiv.append(intP);
-      }
     }
 
     function displayFriend(idx, handle, score, interests) {
@@ -162,6 +166,7 @@
       frScope.innerHTML = score;
 
       var frInt = document.createElement('td');
+      console.log(interests)
       frInt.innerHTML = interests.join(', ');
 
       frRow.append(frScope, frHandle, frScore, frInt);
@@ -169,8 +174,18 @@
     }
     
     function displayFriends(friends) {
-      for (var i=0; i<friends.length; i++)
-        displayFriend(i, user['handle'], user['score'], user['interests']);
+      // var i = 0;
+      // Object.keys(friends).forEach(function(key) {
+      //     user = friends[key]
+      //     console.log(user)
+
+      //     displayFriend(i, user['handle'], user['score'], user['interests']);
+      //     i++;
+      // });
+      // for (var i=0; i<friends.length; i++)
+      //   displayFriend(i, friends['handle'], friends['score'], friends['interests']);
+      displayFriend(1, friends['handle'], friends['score'], friends['interests']);
+
     }
 
     $("#menu-toggle").click(function(e) {
@@ -179,7 +194,7 @@
     });
 
     $('#twitter-handle-submit-btn').click(() => {
-      let handle = '@' + $('#twitter-handle-input').val();
+      let handle = $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
       $.post('/user/' + encodeURIComponent(handle), (data, status, xhr) => {
@@ -196,6 +211,9 @@
 
           friends = friends_and_interests.friends;
           interests = friends_and_interests.interests;
+          str = JSON.stringify(friends);
+          str = JSON.stringify(friends, null, 4); // (Optional) beautiful indented output.
+          console.log(str);
 
           displayInterests(interests);
           displayFriends(friends);

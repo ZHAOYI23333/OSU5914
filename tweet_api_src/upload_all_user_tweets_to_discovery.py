@@ -1,5 +1,6 @@
 import json
-from disco_utils import *
+from ibm_watson import DiscoveryV1
+from tweet_api_src.disco_utils import *
 
 
 def upload_tweets_to_discovery(tweet_list):
