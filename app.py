@@ -1,9 +1,15 @@
 from flask import Flask, jsonify, request
 from match_interests import get_most_alike_to_user
-from tweet_api_src.get_interests_dict_from_disco import get_interests_from_discovery
-from tweet_api_src.upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
-from tweet_api_src.tweet_handler import get_tweets_by_user
-from tweet_api_src.disco_utils import *
+
+import os
+from os.path import join
+import sys
+sys.path.insert(0, join(os.getcwd(), 'tweet_api_src'))
+
+from get_interests_dict_from_disco import get_interests_from_discovery
+from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
+from tweet_handler import get_tweets_by_user
+from disco_utils import *
 import json
 
 app = Flask(__name__, static_url_path='/static')
