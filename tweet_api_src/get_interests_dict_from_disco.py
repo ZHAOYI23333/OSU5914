@@ -1,5 +1,5 @@
 import json
-from tweet_api_src.disco_utils import *
+from disco_utils import *
 import numpy as np
 import pandas as pd
 import operator
