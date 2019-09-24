@@ -186,6 +186,14 @@
       let handle = $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
+      let interestDiv = document.getElementById('self-interest-div');
+      while (interestDiv.firstChild)
+        interestDiv.removeChild(interestDiv.firstChild);
+
+      let friendDiv = document.getElementById('friend-table-body');
+      while (friendDiv.firstChild)
+        friendDiv.removeChild(friendDiv.firstChild);
+
       $.post('/user/' + encodeURIComponent(handle), (data, status, xhr) => {
         if (status !== "success") {
           alert('Couldn\'t upload you into our database. Sorry');
