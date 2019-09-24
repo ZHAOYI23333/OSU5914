@@ -145,7 +145,6 @@
           intP.className = 'list-group-item';
           intP.innerHTML = value;
           interestDiv.append(intP);
-          console.log(value);
       });
       
     }
@@ -166,7 +165,6 @@
       frScope.innerHTML = score;
 
       var frInt = document.createElement('td');
-      console.log(interests)
       frInt.innerHTML = interests.join(', ');
 
       frRow.append(frScope, frHandle, frScore, frInt);
@@ -174,17 +172,8 @@
     }
     
     function displayFriends(friends) {
-      // var i = 0;
-      // Object.keys(friends).forEach(function(key) {
-      //     user = friends[key]
-      //     console.log(user)
-
-      //     displayFriend(i, user['handle'], user['score'], user['interests']);
-      //     i++;
-      // });
-      // for (var i=0; i<friends.length; i++)
-      //   displayFriend(i, friends['handle'], friends['score'], friends['interests']);
-      displayFriend(1, friends['handle'], friends['score'], friends['interests']);
+      for (var i = 0; i < friends.length; i++)
+        displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests']);
 
     }
 
@@ -211,9 +200,6 @@
 
           friends = friends_and_interests.friends;
           interests = friends_and_interests.interests;
-          str = JSON.stringify(friends);
-          str = JSON.stringify(friends, null, 4); // (Optional) beautiful indented output.
-          console.log(str);
 
           displayInterests(interests);
           displayFriends(friends);
