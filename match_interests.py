@@ -17,21 +17,19 @@ def get_most_alike_to_user(user_id, all_users):
 	my_interests = None
 
 	for user, interests in all_users.items():
-		handle = get_document_filename(user)
-		if handle == user_id:
+		if user == user_id:
 			my_interests = interests
 			break
-	print(my_interests)
+
 	if my_interests is None:
 		print('Could not find user in interest dict')
 		return []
 
 	for user, interests in all_users.items():
-		handle = get_document_filename(user)
-		if handle == user_id:
+		if user == user_id:
 			continue
 
-		scores.append((handle, interests, match_score_between_users(my_interests, interests)))
+		scores.append((user, interests, match_score_between_users(my_interests, interests)))
 
 	sorted_scores = list(reversed(sorted(scores, key=lambda x: x[2])))
 	return [{'handle': user, 'score': score, 'interests': interests} for user, interests, score in sorted_scores]

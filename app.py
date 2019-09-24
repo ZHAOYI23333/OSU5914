@@ -28,17 +28,11 @@ def user(handle):
 def friends_and_interests(handle, location):
 	all_users = get_interests_from_discovery()
 	most_alike_users = get_most_alike_to_user(handle, all_users)
-	doc_id = get_document_id_from_filename(all_users, handle)
-	interests = all_users[doc_id]
-	interests_json = {}
-
-	for x in interests:
-		interests_json[x] = x
 		
-	return {
-		'friends': most_alike_users[0],
-		'interests': interests_json
-			}, 200
+	return jsonify({
+		'friends': most_alike_users,
+		'interests': all_users[handle]
+	}), 200
 
 if __name__ == '__main__':
 	app.run(port=5000)

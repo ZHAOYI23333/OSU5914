@@ -16,7 +16,7 @@ def get_interests_from_discovery():
     response_tweets = discovery.query(env_id,
                                       collection_id,
                                       count = 100,
-                                      return_fields='id, enriched_tweets.categories.label').get_result()
+                                      return_fields='id, handle, enriched_tweets.categories.label').get_result()
     
     print("Interests Extraction Completed")
 
@@ -34,8 +34,7 @@ def _make_interests_dict(response_tweets):
     user_interests_dict = {}
 
     for index, row in res_df.iterrows():
-
-        tweet_id = row['id']
+        tweet_id = row['handle']
         label_list = row['enriched_tweets']['categories']
         
         word_dict = {}
