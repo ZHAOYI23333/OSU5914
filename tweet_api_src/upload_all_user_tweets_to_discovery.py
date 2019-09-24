@@ -1,4 +1,5 @@
 import json
+from ibm_watson import DiscoveryV1
 from disco_utils import *
 
 
