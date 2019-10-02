@@ -26,7 +26,6 @@ def upload_tweets_to_discovery(tweet_list):
 	    iam_apikey=apikey,
 	    url='https://gateway-wdc.watsonplatform.net/discovery/api'
 	)
-
 	environment_id = get_environment_id(discovery)
 	if environment_id is None:
 		return 0
@@ -44,6 +43,7 @@ def upload_tweets_to_discovery(tweet_list):
 	screen_name = None
 
 	for i, tweet in enumerate(tweet_list):
+		#tweet = tweet._json
 		if type(tweet) != dict or not all(['user' in tweet, 'text' in tweet]):
 			continue
 
@@ -71,16 +71,14 @@ def upload_tweets_to_discovery(tweet_list):
 			"handle": username
 		})
 
-		document_text = tweet['text']
 
-		if 'tweet' in document and len(document['tweets']) > 0:
-			document_text = document['tweets'] + '||' + document_text
+		document['tweets'] = document['tweets'] + '||' + tweet['text']
+		#print(document['tweets'])
+		# document.update({
+		# 	'tweets': document_text
+		# })
 
-		document.update({
-			'tweets': document_text
-		})
-
-		print('Added tweet %d' % i)
+		#print('Added tweet %d' % i)
 
 		if i >= 100:
 			break;
@@ -88,10 +86,15 @@ def upload_tweets_to_discovery(tweet_list):
 	if screen_name is None:
 		return 0
 
-	print(document)
+	#print(document)
+	print(screen_name)
 
-	discovery.add_document(environment_id, 
+	#For testing purposes
+	if (screen_name=="@test_handle"):
+		return num_tweets_added
+	discovery.update_document(environment_id, 
 						   collection_id, 
+						   screen_name,
 						   file=json.dumps(document), 
 						   filename=screen_name, 
 						   file_content_type='application/json')

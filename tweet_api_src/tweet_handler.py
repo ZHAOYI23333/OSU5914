@@ -30,7 +30,7 @@ def get_tweets_by_user(user_handler):
     for tweet in user_page:
         # disable RT
         if tweet.user.id == user.id and tweet.text[0:2] != 'RT':
-            tweets.append(tweet)
+            tweets.append(tweet._json)
     return tweets
     
 # Input: string of "latitude, longtitude, radius(unit km or mi) [,#hashtag]" 
