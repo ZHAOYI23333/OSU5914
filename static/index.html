@@ -174,7 +174,6 @@
     function displayFriends(friends) {
       for (var i = 0; i < friends.length; i++)
         displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests']);
-
     }
 
     $("#menu-toggle").click(function(e) {
@@ -194,7 +193,7 @@
       while (friendDiv.firstChild)
         friendDiv.removeChild(friendDiv.firstChild);
 
-      $.post('/user/' + encodeURIComponent(handle), (data, status, xhr) => {
+      $.post('/user/' + encodeURIComponent(handle) + '?location=' + encodeURIComponent(location), (data, status, xhr) => {
         if (status !== "success") {
           alert('Couldn\'t upload you into our database. Sorry');
           return;

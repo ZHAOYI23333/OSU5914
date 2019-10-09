@@ -3,6 +3,7 @@ import time
 import json
 import tweepy
 from twitter import *
+from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
 
 # Variables that contains the user credentials to access Twitter API 
 ACCESS_TOKEN = '1164524078012567553-HaxSlY5hVPk4qe2pUz8uIO6slOuLtk'
@@ -15,7 +16,6 @@ CONSUMER_SECRET = 'aebxhRekPV9FVTNwNz5MOHMJVQf624etNj5K8khhfWUDXfm2OT'
 # Output: list of tweet object. Can use tweet.text to get content
 # Example:  tweets = Handler.get_tweets_by_user('taylorswift13')
 def get_tweets_by_user(user_handler):
-    
     tweets = []
     # Create Oath & api class object
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -48,5 +48,13 @@ def get_tweets_by_location(location_handler):
     for tweet in api.search(geocode = location_handler, lang="en", count = 50):
         if tweet.text[0:2] != 'RT':
             tweets.append(tweet)
-            print(tweet.text + '\n')
+
     return tweets
+
+def get_users_by_tweets(tweets):
+	return set([tweet._json['user']['screen_name'] for tweet in tweets])
+
+def upload_all_tweets_of_users(users, location_query):
+	for user in users:
+		user_tweets = get_tweets_by_user(user)
+		upload_tweets_to_discovery(user_tweets, location_query)
