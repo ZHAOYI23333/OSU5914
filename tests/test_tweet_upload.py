@@ -13,7 +13,7 @@ from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
 import ibm_watson
 
 def test_watson_version():
-	assert ibm_watson.__version__ == '3.4.0'
+	assert ibm_watson.__version__ == '3.4.2'
 
 def test_upload_no_list():
 	assert upload_tweets_to_discovery(0, 'dummy_location_query') == 0
