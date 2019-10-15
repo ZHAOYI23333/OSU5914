@@ -7,7 +7,7 @@ import operator
 # Yangzhenchuan Zou (Young Zou)
 
 # returns: a dict as { '<tweet_id>' : [list of interests], ... }
-def get_interests_from_discovery(location_query):
+def get_interests_from_discovery(location_query, orig_handler):
     discovery = get_disco()
     env_id = get_environment_id(discovery)
     collection_id = get_collection_id(discovery, env_id)
@@ -19,10 +19,10 @@ def get_interests_from_discovery(location_query):
                                       count=500,
                                       return_fields='id, handle, location, location_query, enriched_tweets.categories.label').get_result()
 
-    return _make_interests_dict(response_tweets, location_query)
+    return _make_interests_dict(response_tweets, location_query, orig_handler)
 
 
-def _make_interests_dict(response_tweets, location_query):
+def _make_interests_dict(response_tweets, location_query, orig_handler):
     # Load stop words
     with open('tweet_api_src/stopwords.txt', 'r') as stopwords_file:
         stopwords_set = {line.strip() for line in stopwords_file}
@@ -36,8 +36,8 @@ def _make_interests_dict(response_tweets, location_query):
         tweet_id = row['handle']
         label_list = row['enriched_tweets']['categories']
         
-        #if not 'location_query' in row or row['location_query'] != '\"%s\"' % location_query:
-        #    continue
+        if tweet_id != orig_handler and (not 'location_query' in row or row['location_query'] != '\"%s\"' % location_query):
+           continue
 
         location = ''
         if 'location' in row:
