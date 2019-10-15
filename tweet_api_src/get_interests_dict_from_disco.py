@@ -16,7 +16,7 @@ def get_interests_from_discovery(location_query):
     response_tweets = discovery.query(env_id,
                                       collection_id,
                                       qopts={'filter': {'location_query:\"%s\"' % location_query}},
-                                      count=100,
+                                      count=500,
                                       return_fields='id, handle, location, location_query, enriched_tweets.categories.label').get_result()
 
     return _make_interests_dict(response_tweets, location_query)
@@ -36,8 +36,8 @@ def _make_interests_dict(response_tweets, location_query):
         tweet_id = row['handle']
         label_list = row['enriched_tweets']['categories']
         
-        if not 'location_query' in row or row['location_query'] != '\"%s\"' % location_query:
-            continue
+        #if not 'location_query' in row or row['location_query'] != '\"%s\"' % location_query:
+        #    continue
 
         location = ''
         if 'location' in row:
