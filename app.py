@@ -25,13 +25,15 @@ def user(handle):
 	location_query = request.args.get('location')
 	location = ','.join(list(reversed([str(l) for l in get_coordinate(location_query)]))) + ',50km'
 
-	tweets = get_tweets_by_location(location)
-	users = list(get_users_by_tweets(tweets))
-	users = users[:min(len(users), 3)]
-	upload_all_tweets_of_users(users, location_query)
-
 	tweet_list = get_tweets_by_user(handle)
 	upload_tweets_to_discovery(tweet_list, location_query)
+
+	tweets = get_tweets_by_location(location)
+	users = list(get_users_by_tweets(tweets))
+	users = users[:min(len(users), 25)]
+	print('Found %d users' % len(users))
+
+	upload_all_tweets_of_users(users, location_query)
 	return jsonify({}), 200
 
 @app.route('/friends_and_interests/<handle>/<location>', methods=['GET','POST'])
