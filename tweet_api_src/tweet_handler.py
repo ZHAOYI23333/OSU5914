@@ -2,6 +2,7 @@
 import time
 import json
 import tweepy
+from multiprocessing import Pool
 from twitter import *
 from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
 
@@ -54,7 +55,14 @@ def get_tweets_by_location(location_handler):
 def get_users_by_tweets(tweets):
 	return set([tweet._json['user']['screen_name'] for tweet in tweets])
 
+def upload_wrapper(tup):
+    users, location_query = tup
+    for user in users:
+        user_tweets = get_tweets_by_user(user)
+        upload_tweets_to_discovery(user_tweets, location_query)
+
 def upload_all_tweets_of_users(users, location_query):
-	for user in users:
-		user_tweets = get_tweets_by_user(user)
-		upload_tweets_to_discovery(user_tweets, location_query)
+    user_chunks = [(users[i*5 : min(len(users), (i+1)*5)], location_query) for i in range(len(users)//5)]
+    p = Pool(5)
+    p.map(upload_wrapper, user_chunks)
+		
