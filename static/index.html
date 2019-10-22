@@ -27,7 +27,7 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">FriendFinder</a>
+    <a class="navbar-brand navbar-brand-custom" href="#">FriendFinder</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -48,34 +48,40 @@
   </nav>
 
   <div class="d-flex" id="wrapper">
-
-
     <!-- Page Content -->
     <div id="page-content-wrapper">
+
       <div class="jumbotron jumbotron-fluid">
         <div class="container">
-          <h1 class="display-4">Find your friends.</h1>
-          <p class="lead">Find nearby friends.</p>
+          <h1 class="display-4 jumbotron-font">Find your friends.</h1>
+          <p class="lead jumbotron-font-secondary">Find nearby friends.</p>
+        </div>
+        <div class="container info-input-container">
+          <div class="panel panel-default">
+            <label for="exampleInputEmail1">Enter Twitter Info</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="text" id="twitter-handle-input" class="form-control" placeholder="Username"
+                aria-label="emailHelp">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">Location</span>
+              </div>
+              <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41"
+                aria-label="Location">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
+            <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar
+              interests.</small>
+          </div>
         </div>
       </div>
-      <div class="container">
-        <label for="exampleInputEmail1">Enter Twitter Info</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">@</span>
-          </div>
-          <input type="text" id="twitter-handle-input" class="form-control" placeholder="Username"
-            aria-label="emailHelp">
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon2">Location</span>
-          </div>
-          <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41" aria-label="Location">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
-        <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
 
+
+      <div class="container">
         <br><br>
         <h3>Interests Detected (in order of confidence):</h3>
 
