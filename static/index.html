@@ -104,6 +104,7 @@
               <th scope="col">Handle</th>
               <th scope="col">Match Score</th>
               <th scope="col">Similar Interests</th>
+              <th scope="col">Profile Pic</th>
             </tr>
           </thead>
           <tbody id="friend-table-body">
@@ -149,7 +150,7 @@
       
     }
 
-    function displayFriend(idx, handle, score, interests) {
+    function displayFriend(idx, handle, score, interests, image) {
       let friendDiv = $('#friend-table-body');
 
       var frRow = document.createElement('tr');
@@ -167,13 +168,16 @@
       var frInt = document.createElement('td');
       frInt.innerHTML = interests.join(', ');
 
-      frRow.append(frScope, frHandle, frScore, frInt);
+      var frImage = document.createElement('td');
+      frImage.innerHTML = image.join(', ');
+
+      frRow.append(frScope, frHandle, frScore, frInt, image);
       friendDiv.append(frRow);
     }
     
     function displayFriends(friends) {
       for (var i = 0; i < friends.length; i++)
-        displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests']);
+        displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests'], friends[i]['profile_image_url_https']);
     }
 
     $("#menu-toggle").click(function(e) {
