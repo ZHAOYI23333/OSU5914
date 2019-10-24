@@ -30,7 +30,7 @@ def user(handle):
 
 	tweets = get_tweets_by_location(location)
 	users = list(get_users_by_tweets(tweets))
-	users = users[:min(len(users), 25)]
+	users = users[:min(len(users), 2)]
 	print('Found %d users' % len(users))
 
 	upload_all_tweets_of_users(users, location_query)
@@ -42,9 +42,9 @@ def friends_and_interests(handle, location):
 	most_alike_users = get_most_alike_to_user(handle, users_in_region)
 
 	interests = []
-
+	print(users_in_region[handle]) 
 	if handle in users_in_region:
-		interests = users_in_region[handle]
+		interests = users_in_region[handle]["interests"]
 		
 	return jsonify({
 		'friends': most_alike_users,
