@@ -3,6 +3,9 @@ from ibm_watson import DiscoveryV1
 from disco_utils import *
 
 
+from ibm_watson import LanguageTranslatorV3
+
+
 def upload_tweets_to_discovery(tweet_list, location_query):
 	'''
 	:param tweet_list: A list of tweets where each tweet needs to be formatted as:
@@ -27,6 +30,14 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 	    iam_apikey=apikey,
 	    url='https://gateway-wdc.watsonplatform.net/discovery/api'
 	)
+
+
+	language_translator = LanguageTranslatorV3(
+    	version = '2019-08-20',
+    	iam_apikey='zuqZ15JvDgEG9UxCjKZX1Ad_VKL6WLu-T7snTxWgAiC0',
+    	url='https://gateway.watsonplatform.net/language-translator/api'
+    )
+
 	
 	environment_id = get_environment_id(discovery)
 	if environment_id is None:
@@ -75,8 +86,12 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 			"handle": username
 		})
 
+
+		
+
+
 		document['tweets'] = document['tweets'] + '||' + tweet['text']
-		document['tweetsArr'].append(tweet['text'])
+		
 
 		if i >= 100:
 			break
@@ -87,6 +102,14 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 	#For testing purposes
 	if (screen_name=="@test_handle"):
 		return num_tweets_added
+
+	translated_text = language_translator.translate(
+    		text = document['tweets'],
+    		model_id='ja-en').get_result()['translations'][0]['translation']
+
+	document['tweetsArr'] = translated_text.split('||')
+	
+	
 
 	discovery.update_document(environment_id, 
 						   collection_id, 
