@@ -26,73 +26,71 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
-    <button class="navbar-toggler" id="menu-toggle">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand navbar-brand-custom" href="#">FriendFinder</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="#">FriendFinder</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Find by interests<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Wingman dating<span class="sr-only">(current)</span></a>
         </li>
       </ul>
     </div>
   </nav>
 
   <div class="d-flex" id="wrapper">
-
-    <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Automated Friend Finder</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Find Friend by Specific Interest</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Automated Wingman (dating service)</a>
-      </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
-
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-      <div class="container-fluid">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4 jumbotron-font">Find your friends.</h1>
+          <p class="lead jumbotron-font-secondary">Find nearby friends.</p>
+        </div>
+        <div class="container info-input-container">
+          <div class="panel panel-default">
+            <label for="exampleInputEmail1">Enter Twitter Info</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">@</span>
+              </div>
+              <input type="text" id="twitter-handle-input" class="form-control" placeholder="Username"
+                aria-label="emailHelp">
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon2">Location</span>
+              </div>
+              <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41"
+                aria-label="Location">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
+            <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar
+              interests.</small>
+          </div>
+        </div>
+      </div>
 
-        <div class="jumbotron jumbotron-fluid">
-          <div class="container">
-            <h1 class="display-4">Find your friends.</h1>
-            <p class="lead">Find nearby friends.</p>
-          </div>
-        </div>
-      
-        <label for="exampleInputEmail1">Enter Twitter Info</label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">@</span>
-          </div>
-          <input type="text" id="twitter-handle-input" class="form-control" placeholder="Username" aria-label="emailHelp">
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon2">Location</span>
-          </div>
-          <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41" aria-label="Location">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
-        <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
 
+      <div class="container">
         <br><br>
         <h3>Interests Detected (in order of confidence):</h3>
 
         <div class='container-fluid'>
           <div class="row">
             <div class="text-center">
-                <div class="list-group list-group-horizontal" id="self-interest-div">
-                </div>
+              <div class="list-group list-group-horizontal" id="self-interest-div">
               </div>
+            </div>
           </div>
         </div>
         <br>
@@ -111,7 +109,7 @@
         </table>
 
       </div>
-      
+
     </div>
     <!-- /#page-content-wrapper -->
 
@@ -139,14 +137,14 @@
       let interestDiv = $('#self-interest-div');
 
       var value;
-      Object.keys(interests).forEach(function(key) {
-          value = interests[key];
-          var intP = document.createElement('p');
-          intP.className = 'list-group-item';
-          intP.innerHTML = value;
-          interestDiv.append(intP);
+      Object.keys(interests).forEach(function (key) {
+        value = interests[key];
+        var intP = document.createElement('p');
+        intP.className = 'list-group-item';
+        intP.innerHTML = value;
+        interestDiv.append(intP);
       });
-      
+
     }
 
     function displayFriend(idx, handle, score, interests) {
@@ -170,13 +168,13 @@
       frRow.append(frScope, frHandle, frScore, frInt);
       friendDiv.append(frRow);
     }
-    
+
     function displayFriends(friends) {
       for (var i = 0; i < friends.length; i++)
         displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests']);
     }
 
-    $("#menu-toggle").click(function(e) {
+    $("#menu-toggle").click(function (e) {
       e.preventDefault();
       $("#wrapper").toggleClass("toggled");
     });
