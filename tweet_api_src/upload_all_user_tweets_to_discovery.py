@@ -38,7 +38,8 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 
 	document = { 
 		"handle": "uninitialized",
-		"tweets": ""
+		"tweets": "",
+		"tweetsArr":[]
 	}
 
 	num_tweets_added = 0
@@ -75,9 +76,10 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 		})
 
 		document['tweets'] = document['tweets'] + '||' + tweet['text']
+		document['tweetsArr'].append(tweet['text'])
 
 		if i >= 100:
-			break;
+			break
 
 	if screen_name is None:
 		return 0
