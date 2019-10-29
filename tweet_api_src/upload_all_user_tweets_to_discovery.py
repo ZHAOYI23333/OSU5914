@@ -38,7 +38,8 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 
 	document = { 
 		"handle": "uninitialized",
-		"tweets": ""
+		"tweets": "",
+		"tweetsArr":[]
 	}
 
 	num_tweets_added = 0
@@ -67,14 +68,22 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 				'user_id': user['id_str'], 
 				'handle': username, 
 				'location': user['location'],
-				'location_query': '\"%s\"' % location_query
+				'location_query': '\"%s\"' % location_query,
+				'profile_url': ''
 			})
+			if ('profile_image_url_https' in user):
+				document.update({ 
+				'profile_url': user['profile_image_url_https']
+				})
 
 		document.update({
 			"handle": username
 		})
 
 		document['tweets'] = document['tweets'] + '||' + tweet['text']
+
+		document['tweetsArr'].append(tweet['text'])
+
 
 		if i >= 100:
 			break;

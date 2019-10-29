@@ -28,12 +28,12 @@ else:
 	#
 	collection_id = collections['collections'][0]['collection_id']
 
-x = discovery.query(environment_id, collection_id, count=200)
+x = discovery.query(environment_id, collection_id, count=1000)
 #print(x.result)
+count = 0
 for doc in x.result['results']:
-	y = discovery.get_document_status(environment_id, collection_id, doc['id']).result['filename']
-	print(y)
-	print(doc['id'])
-	#if (y=="@test_handle"):
-		#print("you will be yeeted")
-		#discovery.delete_document(environment_id, collection_id, doc['id']).get_result()
+	#y = discovery.get_document_status(environment_id, collection_id, doc['id']).result['filename']
+	#discovery.delete_document(environment_id, collection_id, doc['id'])
+	count+=1
+	print(count)
+

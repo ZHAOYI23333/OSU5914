@@ -14,7 +14,7 @@
   <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-  <link href="static/css/simple-sidebar.css" rel="stylesheet">
+<link href="static/css/simple-sidebar.css" rel="stylesheet">
 
   <!-- Custom fonts -->
   <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
@@ -110,9 +110,9 @@
         <table class="table" id="friend-table">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Handle</th>
               <th scope="col">Match Score</th>
+              <th scope="col">Handle</th>
+              <th scope="col">Profile Pic</th>
               <th scope="col">Similar Interests</th>
             </tr>
           </thead>
@@ -251,7 +251,7 @@
 
     }
 
-    function displayFriend(idx, handle, score, interests) {
+    function displayFriend(idx, handle, score, interests, image) {
       let friendDiv = $('#friend-table-body');
 
       var frRow = document.createElement('tr');
@@ -264,18 +264,28 @@
       frHandle.innerHTML = handle;
 
       var frScore = document.createElement('td');
-      frScope.innerHTML = score;
+      frScope.innerHTML = score.toFixed(3);
 
       var frInt = document.createElement('td');
       frInt.innerHTML = interests.join(', ');
 
-      frRow.append(frScope, frHandle, frScore, frInt);
+      var frImage = document.createElement('td');
+
+      if (image!="no image"){
+        var frImagePic = document.createElement('img');
+        frImagePic.src = image;
+        frImagePic.height = '100';
+        frImagePic.width = '100';
+        frImage.appendChild(frImagePic);
+      }
+
+      frRow.append(frScope, frHandle, frImage, frInt);
       friendDiv.append(frRow);
     }
 
     function displayFriends(friends) {
       for (var i = 0; i < friends.length; i++)
-        displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests']);
+        displayFriend(i, friends[i]['handle'], friends[i]['score'], friends[i]['interests'], friends[i]['image']);
     }
 
     $("#menu-toggle").click(function (e) {
