@@ -71,7 +71,6 @@ def upload_tweets_to_discovery(tweet_list, location_query):
 				'location_query': '\"%s\"' % location_query,
 				'profile_url': ''
 			})
-			print(user)
 			if ('profile_image_url_https' in user):
 				document.update({ 
 				'profile_url': user['profile_image_url_https']
