@@ -169,7 +169,6 @@
       frInt.innerHTML = interests.join(', ');
 
       var frImage = document.createElement('td');
-      frImage.innerHTML = image.join(', ');
 
       frRow.append(frScope, frHandle, frScore, frInt, image);
       friendDiv.append(frRow);
@@ -211,6 +210,7 @@
 
           friends = friends_and_interests.friends;
           interests = friends_and_interests.interests;
+          alert(friends)
 
           displayInterests(interests);
           displayFriends(friends);

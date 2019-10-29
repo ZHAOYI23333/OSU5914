@@ -16,7 +16,7 @@ def get_interests_from_discovery(location_query, orig_handler):
     response_tweets = discovery.query(env_id,
                                       collection_id,
                                       qopts={'filter': {'location_query:\"%s\"' % location_query}},
-                                      count=500,
+                                      count=1000,
                                       return_fields='id, handle, profile_url, location, location_query, enriched_tweets.categories.label').get_result()
 
     return _make_interests_dict(response_tweets, location_query, orig_handler)
@@ -42,10 +42,14 @@ def _make_interests_dict(response_tweets, location_query, orig_handler):
         location = ''
         if 'location' in row:
             location = row['location']
+
         image = ''
         if 'profile_url' in row:
             image = row['profile_url']
-
+            if (type(image)!=str):
+                image="no image"
+        else:
+            image = "no image"
         
         word_dict = {}
 

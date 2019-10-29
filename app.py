@@ -42,10 +42,8 @@ def friends_and_interests(handle, location):
 	most_alike_users = get_most_alike_to_user(handle, users_in_region)
 
 	interests = []
-	print(users_in_region[handle]) 
 	if handle in users_in_region:
 		interests = users_in_region[handle]["interests"]
-		
 	return jsonify({
 		'friends': most_alike_users,
 		'interests': interests
