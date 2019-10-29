@@ -88,8 +88,20 @@
             <p class="text-muted">Nothing yet!</p>
           </div>
         </div>
-      </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Radius</span>
+          </div>
+          <label id="radius-label" aria-label="Radius">50km</label>
+          <input type="range" min="2" max="100" value="50" class="form-control slider" id="radius-range">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
+        <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar interests.</small>
 
+        <button class="btn btn-secondary" id="map-toggle-button" style="margin-top: 15px; margin-bottom: 10px;">Toggle Map</button>
+        <div id="map" class="map" style="height: 300px;"></div>
+        <br><br>
+        <h3>Interests Detected (in order of confidence):</h3>
 
       <div class="container">
         <br>
@@ -114,6 +126,55 @@
     <!-- /#page-content-wrapper -->
 
   </div>
+
+  <style>
+    #radius-label {
+      margin-left: 10px;
+      margin-top: 5px;
+      font-size: 8;
+      color: gray;
+      margin-left: 5px;
+    }
+
+    .marker-overlay {
+      margin-top: -200%;
+      margin-left: -50%;
+    }
+
+    .slider {
+      margin-top: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      -webkit-appearance: none;
+      width: 80%;
+      height: 15px;
+      border-radius: 5px;   
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%; 
+      background:steelblue;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background:steelblue;
+      cursor: pointer;
+    }
+  </style>
+
   <!-- /#wrapper -->
 
   <!-- Bootstrap core JavaScript -->
@@ -121,7 +182,47 @@
   <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Menu Toggle Script -->
-  <script>
+  <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/build/ol.js"></script>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/css/ol.css">
+  <script type="text/javascript">
+    document.getElementById('radius-range').oninput = () => {
+      document.getElementById('radius-label').innerHTML = $('#radius-range').val() + 'km';
+    }
+
+    var map = new ol.Map({
+      target: 'map',
+      layers: [new ol.layer.Tile({ source: new ol.source.OSM() })],
+      view: new ol.View({ center: ol.proj.fromLonLat([-82.87, 40]), zoom: 2})
+    });
+
+    map.on('click', (e) => {
+      $('.marker-overlay').remove();
+
+      var lonlat = ol.coordinate.createStringXY(4)(ol.proj.toLonLat(e.coordinate));
+      var coords = lonlat.split(', ');
+      $('#location-input').val([coords[1], coords[0]].join(','));
+
+      var marker = document.createElement('img');
+      marker.setAttribute('src', 'static/img/marker.png');
+      marker.setAttribute('width', '27.5');
+      marker.setAttribute('height', '45');
+      marker.className = 'marker-overlay';
+
+      map.addOverlay(new ol.Overlay({
+        position: ol.proj.transform(ol.proj.toLonLat(e.coordinate), 'EPSG:4326', 'EPSG:3857'),
+        element: marker
+      }));
+    })
+
+    var mapActive = true;
+
+    $('#map-toggle-button').click(() => {
+      var newH = 0;
+      if (!mapActive) newH = 300;
+      $('#map').height(newH);
+      mapActive = !mapActive;
+    })
+
     function getInterests(handle, callback) {
       $.getJSON('/interests/' + handle, (data, status) => {
         if (status !== "success") {
@@ -185,6 +286,7 @@
     $('#twitter-handle-submit-btn').click(() => {
       let handle = $('#twitter-handle-input').val();
       let location = $('#location-input').val();
+      let radius = $('#radius-range').val();
 
       let interestDiv = document.getElementById('self-interests-div');
       while (interestDiv.firstChild)
@@ -194,7 +296,7 @@
       while (friendDiv.firstChild)
         friendDiv.removeChild(friendDiv.firstChild);
 
-      $.post('/user/' + encodeURIComponent(handle) + '?location=' + encodeURIComponent(location), (data, status, xhr) => {
+      $.post('/user/' + encodeURIComponent(handle) + '?location_arg=' + encodeURIComponent(location) + '&radius=' + encodeURIComponent(radius), (data, status, xhr) => {
         if (status !== "success") {
           alert('Couldn\'t upload you into our database. Sorry');
           return;
