@@ -33,10 +33,7 @@ x = discovery.query(environment_id, collection_id, count=1000)
 count = 0
 for doc in x.result['results']:
 	#y = discovery.get_document_status(environment_id, collection_id, doc['id']).result['filename']
-	#print(y)
-	#print(doc['id'])
-	print(count)
+	#discovery.delete_document(environment_id, collection_id, doc['id'])
 	count+=1
-	if (doc['id']=="JLo"):
-		print("you will be yeeted")
-	#print(discovery.delete_document(environment_id, collection_id, doc['id']).get_result()
+	print(count)
+

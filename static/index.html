@@ -100,11 +100,10 @@
         <table class="table" id="friend-table">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Handle</th>
               <th scope="col">Match Score</th>
-              <th scope="col">Similar Interests</th>
+              <th scope="col">Handle</th>
               <th scope="col">Profile Pic</th>
+              <th scope="col">Similar Interests</th>
             </tr>
           </thead>
           <tbody id="friend-table-body">
@@ -163,14 +162,22 @@
       frHandle.innerHTML = handle;
 
       var frScore = document.createElement('td');
-      frScope.innerHTML = score;
+      frScope.innerHTML = score.toFixed(3);
 
       var frInt = document.createElement('td');
       frInt.innerHTML = interests.join(', ');
 
       var frImage = document.createElement('td');
 
-      frRow.append(frScope, frHandle, frScore, frInt, image);
+      if (image!="no image"){
+        var frImagePic = document.createElement('img');
+        frImagePic.src = image;
+        frImagePic.height = '100';
+        frImagePic.width = '100';
+        frImage.appendChild(frImagePic);
+      }
+
+      frRow.append(frScope, frHandle, frImage, frInt);
       friendDiv.append(frRow);
     }
     
@@ -210,7 +217,6 @@
 
           friends = friends_and_interests.friends;
           interests = friends_and_interests.interests;
-          alert(friends)
 
           displayInterests(interests);
           displayFriends(friends);

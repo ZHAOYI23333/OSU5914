@@ -30,7 +30,7 @@ def user(handle):
 
 	tweets = get_tweets_by_location(location)
 	users = list(get_users_by_tweets(tweets))
-	users = users[:min(len(users), 2)]
+	users = users[:min(len(users), 25)]
 	print('Found %d users' % len(users))
 
 	upload_all_tweets_of_users(users, location_query)
