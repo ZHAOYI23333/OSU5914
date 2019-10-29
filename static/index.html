@@ -51,14 +51,14 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
 
-      <div class="jumbotron jumbotron-fluid">
+      <div class="jumbotron jumbotron-fluid jumbotron-custom">
         <div class="container">
           <h1 class="display-4 jumbotron-font">Find your friends.</h1>
           <p class="lead jumbotron-font-secondary">Find nearby friends.</p>
         </div>
         <div class="container info-input-container">
           <div class="panel panel-default">
-            <label for="exampleInputEmail1">Enter Twitter Info</label>
+            <label class="text-light" for="exampleInputEmail1">Your Twitter Info</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1">@</span>
@@ -70,29 +70,29 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon2">Location</span>
               </div>
-              <input type="text" id="location-input" class="form-control" placeholder="-74,40,-73,41"
+              <input type="text" id="location-input" class="form-control" placeholder="Columbus, OH"
                 aria-label="Location">
             </div>
             <button type="submit" class="btn btn-primary btn-block" id="twitter-handle-submit-btn">Find Friends</button>
-            <small id="emailHelp" class="form-text text-muted">Find nearby twitter accounts with similar
+            <small id="emailHelp" class="text-light">Find nearby twitter accounts with similar
               interests.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-fluid interests-container bg-light border-bottom">
+        <div class="container">
+          <h1 class="display-5">Interests</h1>
+          <p class="text-muted">In order of confidence</p>
+          <div class="text-center" id="self-interests-div">
+            <p class="text-muted">Nothing yet!</p>
           </div>
         </div>
       </div>
 
 
       <div class="container">
-        <br><br>
-        <h3>Interests Detected (in order of confidence):</h3>
-
-        <div class='container-fluid'>
-          <div class="row">
-            <div class="text-center">
-              <div class="list-group list-group-horizontal" id="self-interest-div">
-              </div>
-            </div>
-          </div>
-        </div>
+        <br>
         <br>
         <h3>Nearby Twitter Accounts:</h3>
         <table class="table" id="friend-table">
@@ -134,15 +134,18 @@
     }
 
     function displayInterests(interests) {
-      let interestDiv = $('#self-interest-div');
-
-      var value;
+      let interestDiv = $('#self-interests-div');
+      var value, self_interest_list;
+      interestDiv.empty();
       Object.keys(interests).forEach(function (key) {
-        value = interests[key];
-        var intP = document.createElement('p');
-        intP.className = 'list-group-item';
-        intP.innerHTML = value;
-        interestDiv.append(intP);
+        value = interests[key] + '';
+        self_interest_list = value.split(',');
+        self_interest_list.forEach(function (interest) {
+          var intP = document.createElement('span');
+          intP.className = 'badge badge-pill badge-interests badge-info';
+          intP.innerHTML = interest;
+          interestDiv.append(intP);
+        });
       });
 
     }
@@ -183,7 +186,7 @@
       let handle = $('#twitter-handle-input').val();
       let location = $('#location-input').val();
 
-      let interestDiv = document.getElementById('self-interest-div');
+      let interestDiv = document.getElementById('self-interests-div');
       while (interestDiv.firstChild)
         interestDiv.removeChild(interestDiv.firstChild);
 
