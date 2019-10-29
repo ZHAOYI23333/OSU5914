@@ -1,7 +1,7 @@
 from selenium import selenium
 import time
 import sys
-from configparser import ConfigParser
+from ConfigParser import ConfigParser
 
 MAX_TEST_LENGTH = 300
 if len(sys.argv) > 2: 
@@ -30,7 +30,7 @@ for s in sections:
 if sys.argv[1] == "all":
     browsers = list(targets.values())
 elif sys.argv[1] not in targets:
-    print("Invalid target")
+    print "Invalid target"
     sys.exit()
 else:    
     browsers = [targets[sys.argv[1]]]
@@ -42,7 +42,7 @@ if 1:
         if not keep_going: 
             continue
 
-        print("Running %s on %s" % (b['name'], b['host'])) 
+        print "Running %s on %s" % (b['name'], b['host']) 
         s = selenium(b['host'], 4444, "*%s" % b['browsercmd'], server)
         s.start()
         try:
@@ -75,7 +75,7 @@ if 1:
                 time.sleep(10)
             
             if fail:
-                print("Failed: %s" % fail)
+                print "Failed: %s" % fail
                 html = s.get_eval("window.document.getElementById('results').innerHTML").encode("utf-8")
                 all_html = """<html>
   <head>    
@@ -86,10 +86,10 @@ if 1:
                 f = open("fail.%s.%s.html" % (time.time(), b['name']), "w")
                 f.write(all_html)
                 f.close()
-        except KeyboardInterrupt as E:
+        except KeyboardInterrupt, E:
             keep_going = False
-            print("Stopped by keyboard interrupt")
-        except Exception as E:
-            print("Error: ", E)
+            print "Stopped by keyboard interrupt"
+        except Exception, E:
+            print "Error: ", E
         s.stop()
 
