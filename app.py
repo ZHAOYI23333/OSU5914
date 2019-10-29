@@ -7,12 +7,13 @@ import sys
 sys.path.insert(0, join(os.getcwd(), 'tweet_api_src'))
 sys.path.insert(0, join(os.getcwd(), 'geo_service_src'))
 
-from geocode import get_coordinate
+from geocode import get_coordinate, get_city
 from get_interests_dict_from_disco import get_interests_from_discovery
 from upload_all_user_tweets_to_discovery import upload_tweets_to_discovery
 from tweet_handler import get_tweets_by_location, get_tweets_by_user, get_users_by_tweets, upload_all_tweets_of_users
 from disco_utils import *
 import json
+import re
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -22,8 +23,27 @@ def index():
 
 @app.route('/user/<handle>', methods=['GET','POST'])
 def user(handle):
-	location_query = request.args.get('location')
-	location = ','.join(list(reversed([str(l) for l in get_coordinate(location_query)]))) + ',50km'
+	location_arg = request.args.get('location_arg')
+	if location_arg is None:
+		return 'Bad', 400
+
+	radius = request.args.get('radius')
+	if radius is None:
+		radius = '50km'
+	else:
+		radius += 'km'
+
+	location, location_query = None, None
+
+	if re.match('\d+.\d+,[ ]{0,1}-{0,1}\d+.\d+', location_arg):
+		location = location_arg
+		location_query = get_city(location)
+		location += ',' + radius
+	else:
+		location_query = location_arg
+		location = ','.join(list(reversed([str(l) for l in get_coordinate(location_query)]))) + ',' + radius
+
+	print(location, location_query, radius)
 
 	tweet_list = get_tweets_by_user(handle)
 	upload_tweets_to_discovery(tweet_list, location_query)
