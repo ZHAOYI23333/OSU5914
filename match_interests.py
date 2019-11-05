@@ -32,5 +32,30 @@ def get_most_alike_to_user(user_id, all_users):
 		scores.append((user, user_dict, match_score_between_users(my_interests, user_dict['interests'])))
 
 	sorted_scores = list(reversed(sorted(scores, key=lambda x: x[2])))
-	print(user_dict['image'])
-	return [{'handle': user, 'score': score, 'interests': user_dict['interests'], 'location': user_dict['location'], 'image': user_dict['image'] } for user, user_dict, score in sorted_scores]
+
+	users = [{'handle': user, 'score': score, 'interests': user_dict['interests'], 'location': user_dict['location'], 'image': user_dict['image'] } for user, user_dict, score in sorted_scores]
+	print('%d users found in total' % len(users))
+
+	nonzero_users = [user for user in users if user['score'] > 0]
+	print('%d users found with non-zero score' % len(nonzero_users))
+	if len(users) < 5:
+		nonzero_users.extend(users[:5 - len(users)])
+
+	matched_users = []
+	nonmatched_users = []
+
+	for user in users:
+		if user['score'] > 0:
+			matched_users.append(user)
+
+			if len(matched_users) == 10:
+				break
+
+			continue
+
+		nonmatched_users.append(user)
+
+	if len(matched_users) < 10:
+		matched_users.extend(nonmatched_users[:10 - len(matched_users)])
+
+	return matched_users
