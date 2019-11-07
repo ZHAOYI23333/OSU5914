@@ -14,7 +14,7 @@
   <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
-<link href="static/css/simple-sidebar.css" rel="stylesheet">
+  <link href="static/css/simple-sidebar.css" rel="stylesheet">
 
   <!-- Custom fonts -->
   <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
@@ -78,9 +78,9 @@
             </div>
 
             <div class="container-fluid range-slider-container">
-              <div class="range-slider">
-                <input type="range" min="2" max="100" value="50" class="slider" id="radius-range">
-                <span class="slider-radius-label" id="radius-label" aria-label="Radius">Range: 50 km</span>
+              <div class="d-flex align-middle">
+                <input type="range" min="2" max="100" value="50" class="slider align-self-center" id="radius-range">
+                <span class="slider-radius-label" id="radius-label" aria-label="Radius">Range: 50 KM</span>
               </div>
             </div>
 
@@ -121,7 +121,6 @@
           </tbody>
         </table>
       </div>
-
     </div>
     <!-- /#page-content-wrapper -->
 
@@ -223,7 +222,7 @@
 
       var frImage = document.createElement('td');
 
-      if (image!="no image"){
+      if (image != "no image") {
         var frImagePic = document.createElement('img');
         frImagePic.src = image;
         frImagePic.height = '100';
