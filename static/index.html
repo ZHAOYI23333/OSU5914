@@ -94,8 +94,16 @@
 
       <div id="map" class="map" style="height: 300px;"></div>
 
+      
+
       <div class="container-fluid interests-container bg-light border-top border-bottom">
         <div class="container">
+
+          <h3 id="loadingText"> </h3>
+          <div id="loadingBar" style="height: 30px;">
+            
+          </div> 
+
           <h1 class="display-5">Interests</h1>
           <p class="text-muted">In order of confidence</p>
           <div class="text-center" id="self-interests-div">
@@ -174,6 +182,46 @@
       mapActive = !mapActive;
     })
 
+    async function startLoadingBar() {
+      const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      }
+      let pbar =  document.createElement("div");
+      document.getElementById("loadingText").innerHTML = "Loading (May take some time)...";
+      document.getElementById("loadingBar").className = "progress";
+      pbar.className = "progress-bar";
+      pbar.setAttribute("role", "progressbar");
+      pbar.style.width = "0%";
+      let span =  document.createElement("span");
+      pbar.innerHTML = "0%"
+      document.getElementById("loadingBar").appendChild(pbar);
+      for (i=0; i<100; i+=1){
+        pbar.style.width= i + "%";
+        pbar.innerHTML = i + "%";
+        await sleep(320);
+      }
+    }
+
+    async function endLoadingBar() {
+      const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      }
+      let x = document.getElementById("loadingBar");
+      x.innerHTML = "";
+      let pbar =  document.createElement("div");
+      pbar.className = "progress-bar";
+      pbar.setAttribute("role", "progressbar");
+      pbar.style.width = "100%";
+      let span =  document.createElement("span");
+      pbar.innerHTML = "100%"
+      x.appendChild(pbar);
+      await sleep(1000);
+      document.getElementById("loadingText").innerHTML = "";
+      x.innerHTML = "";
+      x.className = "";
+      
+    }
+
     function getInterests(handle, callback) {
       $.getJSON('/interests/' + handle, (data, status) => {
         if (status !== "success") {
@@ -249,6 +297,8 @@
       let location = $('#location-input').val();
       let radius = $('#radius-range').val();
 
+      startLoadingBar();
+
       let interestDiv = document.getElementById('self-interests-div');
       while (interestDiv.firstChild)
         interestDiv.removeChild(interestDiv.firstChild);
@@ -268,7 +318,7 @@
             alert('Couldn\'t get your friends. Sorry');
             return;
           }
-
+          endLoadingBar();
           friends = friends_and_interests.friends;
           interests = friends_and_interests.interests;
 
