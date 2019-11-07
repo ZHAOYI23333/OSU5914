@@ -41,7 +41,7 @@
           <a class="nav-link" href="#">Find by interests<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="#">Wingman dating<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#">Wingman dating<span class="sr-only">(current)</spx2an></a>
         </li>
       </ul>
     </div>
@@ -70,7 +70,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon2">Location</span>
               </div>
-              <input type="text" id="location-input" class="form-control" placeholder="Columbus, OH"
+              <input type="text" list = "cities" id="location-input" class="form-control" placeholder="Columbus, OH"
                 aria-label="Location">
               <div class="input-group-append">
                 <button class="btn btn-info input-group-append" id="map-toggle-button">Toggle Map</button>
@@ -133,7 +133,8 @@
   <!-- Bootstrap core JavaScript -->
   <script src="static/vendor/jquery/jquery.min.js"></script>
   <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  <!-- city recommendation -->
+  <script src="static/city_recommand.js"></script>
   <!-- Menu Toggle Script -->
   <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/build/ol.js"></script>
   <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/css/ol.css">
@@ -141,6 +142,9 @@
     document.getElementById('radius-range').oninput = () => {
       document.getElementById('radius-label').innerHTML = 'Range: ' + $('#radius-range').val() + ' KM';
     }
+
+
+  
 
     var map = new ol.Map({
       target: 'map',
@@ -226,9 +230,9 @@
 
       if (image!="no image"){
         var frImagePic = document.createElement('img');
-        frImagePic.src = image;
-        frImagePic.height = '100';
-        frImagePic.width = '100';
+        frImagePic.src = image.replace("normal", "400x400");
+        frImagePic.height = '80';
+        frImagePic.width = '80';
         frImage.appendChild(frImagePic);
       }
 
