@@ -46,7 +46,7 @@ def get_tweets_by_location(location_handler):
 
     # handling twitter user & user page information
     # user_page = api.user_timeline(user_handler)   
-    for tweet in api.search(geocode = location_handler, lang="en", count = 50):
+    for tweet in api.search(geocode = location_handler, lang="en", count = 200):
         if tweet.text[0:2] != 'RT':
             tweets.append(tweet)
 

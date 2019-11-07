@@ -54,6 +54,7 @@ def user(handle):
 	print('Found %d users' % len(users))
 
 	upload_all_tweets_of_users(users, location_query)
+	print('Finished uploading tweets of nearby users')
 	return jsonify({}), 200
 
 @app.route('/friends_and_interests/<handle>/<location>', methods=['GET','POST'])

@@ -111,16 +111,15 @@
         <table class="table" id="friend-table">
           <thead>
             <tr>
-              <th scope="col">Match Score</th>
-              <th scope="col">Handle</th>
               <th scope="col">Profile Pic</th>
+              <th scope="col">Score</th>
+              <th scope="col">Handle</th>
               <th scope="col">Similar Interests</th>
             </tr>
           </thead>
           <tbody id="friend-table-body">
           </tbody>
         </table>
-
       </div>
 
     </div>
@@ -229,14 +228,18 @@
       var frImage = document.createElement('td');
 
       if (image!="no image"){
+        var linkpage = document.createElement('a');
+        linkpage.href = "https://twitter.com/" + handle;
+        linkpage.target = '_blank'
         var frImagePic = document.createElement('img');
         frImagePic.src = image.replace("normal", "400x400");
         frImagePic.height = '80';
         frImagePic.width = '80';
-        frImage.appendChild(frImagePic);
+        linkpage.appendChild(frImagePic);
+        frImage.appendChild(linkpage);
       }
 
-      frRow.append(frScope, frHandle, frImage, frInt);
+      frRow.append(frImage, frScope, frHandle, frInt);
       friendDiv.append(frRow);
     }
 
