@@ -17,7 +17,7 @@ def get_interests_from_discovery(location_query, orig_handler):
                                       collection_id,
                                       qopts={'filter': {'location_query:\"%s\"' % location_query}},
                                       count=1000,
-                                      return_fields='id, handle, profile_url, location, location_query, enriched_tweetsArr.categories.label, enriched_location.categories.label').get_result()
+                                      return_fields='id, handle, profile_url, location, location_query, enriched_tweetsArr, enriched_tweets').get_result()
 
     return _make_interests_dict(response_tweets, location_query, orig_handler)
 
@@ -65,9 +65,9 @@ def _make_interests_dict(response_tweets, location_query, orig_handler):
                     else:
                         word_dict[word] = 1
 
-        if not pd.isnull(row['enriched_location']):
-            location_label_list = row['enriched_location']['categories']
-            for label_item in location_label_list:
+        if not pd.isnull(row['enriched_tweets']):
+            tweets_label_list = row['enriched_tweets']['categories']
+            for label_item in tweets_label_list:
                 label = label_item['label'].replace('/', ' ').split()
                 # Word count
                 for word in label:
