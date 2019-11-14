@@ -17,7 +17,7 @@ def get_interests_from_discovery(location_query, orig_handler):
                                       collection_id,
                                       qopts={'filter': {'location_query:\"%s\"' % location_query}},
                                       count=1000,
-                                      return_fields='id, handle, profile_url, location, location_query, enriched_tweets.categories.label').get_result()
+                                      return_fields='id, handle, profile_url, location, location_query, enriched_tweetsArr.categories.label, enriched_location.categories.label').get_result()
 
     return _make_interests_dict(response_tweets, location_query, orig_handler)
 
@@ -34,7 +34,7 @@ def _make_interests_dict(response_tweets, location_query, orig_handler):
 
     for index, row in res_df.iterrows():
         tweet_id = row['handle']
-        label_list = row['enriched_tweets']['categories']
+
         
         if tweet_id != orig_handler and (not 'location_query' in row or row['location_query'] != '\"%s\"' % location_query):
            continue
@@ -53,14 +53,28 @@ def _make_interests_dict(response_tweets, location_query, orig_handler):
         
         word_dict = {}
 
-        for label_item in label_list:
-            label = label_item['label'].replace('/', ' ').split()
-            # Word count
-            for word in label:
-                if word in word_dict: 
-                    word_dict[word] = word_dict[word] + 1
-                else:
-                    word_dict[word] = 1
+
+        if not pd.isnull(row['enriched_tweetsArr']):
+            tweets_arr_label_list = row['enriched_tweetsArr']['categories']
+            for label_item in tweets_arr_label_list:
+                label = label_item['label'].replace('/', ' ').split()
+                # Word count
+                for word in label:
+                    if word in word_dict: 
+                        word_dict[word] = word_dict[word] + 1
+                    else:
+                        word_dict[word] = 1
+
+        if not pd.isnull(row['enriched_location']):
+            location_label_list = row['enriched_location']['categories']
+            for label_item in location_label_list:
+                label = label_item['label'].replace('/', ' ').split()
+                # Word count
+                for word in label:
+                    if word in word_dict: 
+                        word_dict[word] = word_dict[word] + 1
+                    else:
+                        word_dict[word] = 1
 
         # Sort keywords by frequency
         sorted_interests = sorted(word_dict, key=word_dict.get, reverse=True)
